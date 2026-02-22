@@ -5,7 +5,16 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://unrivaled-duckanoo-580fee.netlify.app', 
+    'https://frontent-delta.vercel.app', // Your Vercel frontend
+    'http://localhost:5173'              // For local development
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Health check
 app.get('/health', (req, res) => {
