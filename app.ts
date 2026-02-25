@@ -5,11 +5,14 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+
+// CORS configuration - Updated with GitHub Pages
 app.use(cors({
   origin: [
     'https://unrivaled-duckanoo-580fee.netlify.app', 
-    'https://frontent-delta.vercel.app', // Your Vercel frontend
-    'http://localhost:5173'              // For local development
+    'https://frontent-delta.vercel.app',
+    'http://localhost:5173',
+    'https://chauhanravicr7-netizen.github.io' // <--- ADDED TO FIX YOUR ERROR
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -32,7 +35,8 @@ app.post('/api/auth/login', (req, res) => {
     token: 'token123',
     userId: 'user1',
     companyId: 'company1',
-    role: 'ADMIN'
+    role: 'ADMIN',
+    email: req.body.email || 'demo@dockside.com'
   });
 });
 
