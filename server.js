@@ -21,7 +21,13 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (origin.endsWith('.vercel.app') || origin === 'http://localhost:5173') {
+      return callback(null, true);
+    }
+    callback(new Error('CORS blocked'));
+  },
   credentials: true,
 }));
 app.use(express.json());
