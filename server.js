@@ -219,6 +219,35 @@ app.put('/api/customers/:id', verifyToken, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── AUTOCOMPLETE SEARCH ──────────────────────────────────────
+app.get('/api/autocomplete/suppliers', verifyToken, async (req, res) => {
+  try {
+    const q = req.query.q || '';
+    const { data, error } = await supabase
+      .from('suppliers')
+      .select('id, name, city, gst_number')
+      .eq('company_id', cid(req))
+      .ilike('name', `%${q}%`)
+      .limit(10);
+    if (error) throw error;
+    res.json(data || []);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/autocomplete/customers', verifyToken, async (req, res) => {
+  try {
+    const q = req.query.q || '';
+    const { data, error } = await supabase
+      .from('customers')
+      .select('id, name, city, gst_number')
+      .eq('company_id', cid(req))
+      .ilike('name', `%${q}%`)
+      .limit(10);
+    if (error) throw error;
+    res.json(data || []);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // ── DEALS ────────────────────────────────────────────────────
 app.get('/api/deals', verifyToken, async (req, res) => {
   try {
